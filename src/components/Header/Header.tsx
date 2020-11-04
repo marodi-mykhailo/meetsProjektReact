@@ -6,7 +6,7 @@ const logo = 'https://events.com/wp-content/uploads/2019/11/Events_Primary_Logo-
 
 const Header = () => {
     return (
-        <div className={s.wrapper}>
+        <header className={s.wrapper}>
             <div className={s.logoWrap}>
                 <img className={s.logo} src={logo} alt={'logo'}/>
             </div>
@@ -17,7 +17,7 @@ const Header = () => {
                 <Button variant={"outline-primary"}>Sign in</Button>
                 <Button variant={"outline-success"}>Login</Button>
             </div>
-        </div>
+        </header>
     );
 };
 
