@@ -12,6 +12,8 @@ type AuthInitialState = {
 }
 
 
+
+
 const authInitialState: AuthInitialState = {
     email: null,
     password: null,
@@ -50,6 +52,7 @@ const setIsAuth = () => ({
     type: 'SET_IS_AUTH'
 } as const)
 
+
 export const register = (username: string, email: string, password: string, confirmPassword: string) => {
     return (dispatch: Dispatch) => {
         authAPI.register(username, email, password, confirmPassword)
@@ -73,6 +76,7 @@ export const login = (email: string, password: string, rememberMe: boolean) => {
         authAPI.login(email, password, rememberMe)
             .then(res => {
                 if (res.data.resultCode === 0) {
+                    debugger
                     dispatch(setIsAuth())
                 }
             }).catch(error => {

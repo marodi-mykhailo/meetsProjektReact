@@ -6,16 +6,27 @@ import Avatar from '@material-ui/core/Avatar';
 
 const img = 'https://secure.meetupstatic.com/photos/event/a/8/4/e/highres_486643086.jpeg'
 
-const MeetingItem = () => {
+type MeetingItemPropsType ={
+    "id": string,
+    "title": string,
+    "description": string,
+    "meetupImgPath": string,
+    "meetupDate": string,
+    "city": string,
+    "createdByUser": string,
+    "users": null
+}
+
+const MeetingItem = (props: MeetingItemPropsType) => {
     return (
         <Paper elevation={3} className={s.itemWrapp}>
             <div className={s.item}>
-                <div className={s.imgWrapp}><img className={s.img} src={img} alt={''}/></div>
+                <div className={s.imgWrapp}><img className={s.img} src={props.meetupImgPath} alt={''}/></div>
                 <div className={s.container}>
-                    <div className={s.dateWrapp}><span>18.10 Frid</span></div>
+                    <div className={s.dateWrapp}><span>{props.meetupDate}</span></div>
                     <div className={s.info}>
-                        <div className={s.titleWrapp}><h6>Data Science Rzeszow</h6></div>
-                        <div className={s.name}><span>Wsiz Rzeszow</span></div>
+                        <div className={s.titleWrapp}><h6>{props.title}</h6></div>
+                        <div className={s.name}><span>{props.createdByUser} {props.city}</span></div>
                     </div>
                     <div className={s.membersWrapp}>
                         <AvatarGroup spacing={'medium'} max={4}>

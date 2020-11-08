@@ -10,12 +10,23 @@ import Slider from "./components/Slider/Slider";
 import MeetingList from "./components/MeetingList/MeetingList";
 import MeetItem from "./components/MeetItem/MeetItem";
 import CreateMeet from "./components/CreateMeet/CreateMeet";
+import {LinearProgress} from "@material-ui/core";
+import {AppStateType} from "./redux/store";
+import {RequestStatusType} from "./redux/appReducer";
+import {getMe} from "./redux/userReducer";
+import MyMeetUps from "./components/MyMeetUps/MyMeetUps";
 
 
 function App() {
+    const appStatus = useSelector<AppStateType, RequestStatusType>(state => state.app.status)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getMe())
+    }, [])
     return (
         <div>
             <Header/>
+            {appStatus === 'loading' && <LinearProgress/>}
             <Switch>
                 <Route exact path={'/register'}
                        render={() =>
@@ -40,6 +51,9 @@ function App() {
                        render={() =>
                            <CreateMeet/>
                        }
+                />
+                <Route exact path={'/myMeetUps'}
+                       render={() => <MyMeetUps/>}
                 />
                 <Route exact path={'/list'} render={() => <MeetItem/>}/>
                 <Route exact path={'/404'} render={() => <h1>404 Not found</h1>}/>
