@@ -15,13 +15,13 @@ const Header = () => {
             <div className={s.searchWrap}>
                 <SearchForm/>
             </div>
-            {/*<div className={s.btnWrap}>*/}
-            {/*    <Button variant={"outline-primary"}>Sign in</Button>*/}
-            {/*    <Button variant={"outline-success"}>Login</Button>*/}
-            {/*</div>*/}
-            <div className={s.menuWrapp}>
-                <HeaderMe/>
+            <div className={s.btnWrap}>
+                <Button variant={"outline-primary"}>Sign in</Button>
+                <Button variant={"outline-success"}>Login</Button>
             </div>
+            {/*<div className={s.menuWrapp}>*/}
+            {/*    <HeaderMe/>*/}
+            {/*</div>*/}
         </header>
     );
 };

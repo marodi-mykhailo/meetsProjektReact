@@ -8,16 +8,23 @@ import {Formik, Form, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 import {Redirect} from 'react-router-dom';
 import s from '../../components/Auth/Auth.module.css'
+import {AppStateType} from "../../redux/store";
+import {useDispatch, useSelector} from "react-redux";
+import {login} from "../../redux/authReducer";
+import {Checkbox, FormControlLabel} from "@material-ui/core";
+import {Switch} from "formik-material-ui";
 
 
 type InitialValuesFormikType = {
     email: string
     password: string
+    check: boolean
 }
 
 const initialValues = {
     email: '',
     password: '',
+    check: true,
 }
 
 const validationSchema = Yup.object({
@@ -26,6 +33,10 @@ const validationSchema = Yup.object({
 })
 
 const LoginForm = () => {
+    const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isAuth)
+
+    const dispatch = useDispatch();
+
     const [focus, setFocus] = useState<any>({
         email: false,
         password: false,
@@ -55,20 +66,23 @@ const LoginForm = () => {
     }
 
     const onSubmit = (values: InitialValuesFormikType) => {
-        console.log(values)
+        dispatch(login(values.email, values.password, values.check))
     }
-    // const isRegister = useSelector<AppStateType, boolean>(state => state.auth2.isRegister)
-    //
-    // if (isRegister) {
+
+    if (isLoggedIn) {
+        return <Redirect to={'/'}/>
+    }
+
     return (
         <Formik initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}>
             <div className={s.loginContent}>
                 <Form id="reg__form">
-                    <img src={avatar}  alt={''}/>
+                    <img src={avatar} alt={''}/>
                     <h2 className={s.title}>Welcome</h2>
-                    <div className={(focus.email || !!value.email) ? `${s.inputDiv} ${s.one} ${s.focus}` : `${s.inputDiv} ${s.one}`}>
+                    <div
+                        className={(focus.email || !!value.email) ? `${s.inputDiv} ${s.one} ${s.focus}` : `${s.inputDiv} ${s.one}`}>
                         <div className={s.i}>
                             <FontAwesomeIcon className={s.fas} icon={faUser}/>
                         </div>
@@ -88,7 +102,8 @@ const LoginForm = () => {
                         </div>
                     </div>
 
-                    <div className={(focus.password || !!value.password) ? `${s.inputDiv} ${s.pass} ${s.focus}` : `${s.inputDiv} ${s.pass}`}>
+                    <div
+                        className={(focus.password || !!value.password) ? `${s.inputDiv} ${s.pass} ${s.focus}` : `${s.inputDiv} ${s.pass}`}>
                         <div className={s.i}>
                             <FontAwesomeIcon className={s.fas} icon={faLock}/>
                         </div>
@@ -107,7 +122,13 @@ const LoginForm = () => {
                             }</ErrorMessage>
                         </div>
                     </div>
-                    <a href="#">Forgot Password?</a>
+                    <div className={s.rememberMe}>
+                        <FormControlLabel
+                            label={'Remember me'}
+                            control={<Field component={Switch} type="checkbox" name="check"/>}
+                        />
+                    </div>
+                    {/*<a href="#">Forgot Password?</a>*/}
                     <button type="submit" className={s.btn}>Submit</button>
                     <button className={s.btn} onClick={() => {
                         return <Redirect to={'/register'}/>

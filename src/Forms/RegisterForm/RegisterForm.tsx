@@ -3,12 +3,14 @@ import avatar from "../../assets/images/avatar.svg";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser} from "@fortawesome/free-solid-svg-icons/faUser";
 import {faCheckCircle} from "@fortawesome/free-solid-svg-icons/faCheckCircle";
-import {faEnvelope, faExclamationCircle, faLock} from "@fortawesome/free-solid-svg-icons";
+import {faCloudUploadAlt, faEnvelope, faExclamationCircle, faLock} from "@fortawesome/free-solid-svg-icons";
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {register} from "../../redux/authReducer";
 import s from "../../components/Auth/Auth.module.css"
+import {AppStateType} from "../../redux/store";
+import {Redirect} from 'react-router-dom';
 
 
 export type RegisterFormDataType = {
@@ -41,6 +43,7 @@ const validationSchema = Yup.object({
 })
 
 const RegisterForm = () => {
+    const isRegister = useSelector<AppStateType, boolean>(state => state.auth.isRegister)
     const dispatch = useDispatch()
     const [focus, setFocus] = useState<any>({
         username: false,
@@ -78,15 +81,27 @@ const RegisterForm = () => {
         dispatch(register(values.username, values.email, values.password, values.password2))
     }
 
-
+    if (isRegister) {
+        return <Redirect to={'/login'}/>
+    }
     return (
         <Formik initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}>
             <Form id="reg__form">
+                {/*<div className={s.avatarWrapp}>*/}
+                {/*    <label className={s.regImg} htmlFor={"fileInput"}>*/}
+                {/*        <img  src={avatar} alt={''}/>*/}
+                {/*        <div className={s.avatarIcon}>*/}
+                {/*            <FontAwesomeIcon icon={faCloudUploadAlt}/>*/}
+                {/*        </div>*/}
+                {/*        <input id={"fileInput"} className={s.fileInput} type={'file'}/>*/}
+                {/*    </label>*/}
+                {/*</div>*/}
                 <img src={avatar} alt={''}/>
                 <h2 className={s.title}>Waiting for you</h2>
-                <div className={(focus.username || !!value.username) ? `${s.inputDiv} ${s.one} ${s.focus}` : `${s.inputDiv} ${s.one}`}>
+                <div
+                    className={(focus.username || !!value.username) ? `${s.inputDiv} ${s.one} ${s.focus}` : `${s.inputDiv} ${s.one}`}>
                     <div className={s.i}>
                         <FontAwesomeIcon className={s.fas} icon={faUser}/>
                     </div>
@@ -106,7 +121,8 @@ const RegisterForm = () => {
                     </div>
                 </div>
 
-                <div className={(focus.email || !!value.email) ? `${s.inputDiv} ${s.one} ${s.focus}` : `${s.inputDiv} ${s.one}`}>
+                <div
+                    className={(focus.email || !!value.email) ? `${s.inputDiv} ${s.one} ${s.focus}` : `${s.inputDiv} ${s.one}`}>
                     <div className={s.i}>
                         <FontAwesomeIcon className={s.fas} icon={faUser}/>
                     </div>
@@ -126,7 +142,8 @@ const RegisterForm = () => {
                     </div>
                 </div>
 
-                <div className={(focus.password || !!value.password) ? `${s.inputDiv} ${s.pass} ${s.focus}` : `${s.inputDiv} ${s.pass}`}>
+                <div
+                    className={(focus.password || !!value.password) ? `${s.inputDiv} ${s.pass} ${s.focus}` : `${s.inputDiv} ${s.pass}`}>
                     <div className={s.i}>
                         <FontAwesomeIcon className={s.fas} icon={faLock}/>
                     </div>
@@ -146,7 +163,8 @@ const RegisterForm = () => {
                     </div>
                 </div>
 
-                <div className={(focus.password2 || !!value.password2) ? `${s.inputDiv} ${s.pass} ${s.focus}` : `${s.inputDiv} ${s.pass}`}>
+                <div
+                    className={(focus.password2 || !!value.password2) ? `${s.inputDiv} ${s.pass} ${s.focus}` : `${s.inputDiv} ${s.pass}`}>
                     <div className={s.i}>
                         <FontAwesomeIcon className={s.fas} icon={faLock}/>
                     </div>

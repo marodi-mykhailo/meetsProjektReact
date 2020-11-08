@@ -1,16 +1,27 @@
 import axios from 'axios'
 
 export const instance = axios.create({
-    baseURL: 'http://localhost:5000/api/',
-    headers: {"Access-Control-Allow-Origin": "*"},
+    baseURL: 'https://connectusweb20201107204235.azurewebsites.net/api/',
 })
 
+export type ResponseType<D = null> = {
+    resultCode: number
+    message: Array<string>
+    data: D
+}
 
 export const authAPI ={
-    register: (username: string, email: string, password: string, confirmPassword: string) => {
-        return instance.post('account/register', {username, email, password, confirmPassword})
+    register(username: string, email: string, password: string, confirmPassword: string) {
+        return instance.post<ResponseType>('account/register', {username, email, password, confirmPassword})
     },
-    getList: () => {
+    login(email: string, password: string, rememberMe: boolean) {
+        return instance.post<ResponseType>('account/login', {email, password, rememberMe})
+    },
+
+}
+
+export const meetUpAPI = {
+    getList() {
         return instance.get('home')
     }
 }

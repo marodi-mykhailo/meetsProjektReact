@@ -1,12 +1,16 @@
 import {Paper} from '@material-ui/core';
-import React from 'react';
+import React, {useEffect} from 'react';
 import s from './MeetingList.module.css'
 import MeetingItem from "./MeetingItem/MeetingItem";
 import {Container} from "react-bootstrap";
+import {useDispatch} from "react-redux";
 
 const arr = Array(1, 3, 4, 5, 6, 7,4,6,7)
 
 const MeetingList = () => {
+    const dispatch = useDispatch()
+    useEffect(() => {
+    },[])
     return (
         <div>
             <h1 className={s.h1}>All meetings</h1>
