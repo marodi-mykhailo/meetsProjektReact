@@ -10,7 +10,7 @@ export type MeetUpDataType = {
     meetupDate: string,
     city: string,
     createdByUser: string,
-    users: null
+    users: []
 }
 
 type PageViewDataType = {
@@ -37,7 +37,7 @@ let initialState: MeetUpReducerInitialState = {
             "meetupDate": "2020-11-08T14:00:01.9332275",
             "city": "Rzeszow",
             "createdByUser": 'a',
-            "users": null
+            "users": []
         }
     ],
     pageView: {
@@ -50,7 +50,7 @@ let initialState: MeetUpReducerInitialState = {
 
 type MeetUpReducerActionType = |ReturnType<typeof setMeetUps>
 
-export const meetUpReducer = (state = initialState, action: MeetUpReducerActionType): MeetUpReducerInitialState => {
+export const meetUpListReducer = (state = initialState, action: MeetUpReducerActionType): MeetUpReducerInitialState => {
     switch (action.type) {
         case "SET_MEET_UPS":
             return {

@@ -25,7 +25,7 @@ function App() {
     }, [])
     return (
         <div>
-            <Route exact path={['/', '/createMeet', '/myMeetUps', '/list' ]} render={()=> <Header/>}/>
+            <Route exact path={['/', '/createMeet', '/myMeetUps', '/meetUp' ]} render={()=> <Header/>}/>
             {appStatus === 'loading' && <LinearProgress/>}
             <Switch>
                 <Route exact path={'/register'}
@@ -55,7 +55,7 @@ function App() {
                 <Route exact path={'/myMeetUps'}
                        render={() => <MyMeetUps/>}
                 />
-                <Route exact path={'/list'} render={() => <MeetItem/>}/>
+                <Route exact path={'/meetUp/:meetUpId?'} render={() => <MeetItem/>}/>
                 <Route exact path={'/404'} render={() => <h1>404 Not found</h1>}/>
                 <Redirect from={'*'} to={'/404'}/>
             </Switch>

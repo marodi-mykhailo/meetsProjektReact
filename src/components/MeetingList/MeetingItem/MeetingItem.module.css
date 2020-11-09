@@ -1,5 +1,5 @@
 .itemWrapp {
-    width: 20%;
+    width: 100%;
     margin: 20px;
     height: 330px;
     position: relative;
@@ -16,11 +16,10 @@
 }
 
 .container {
-    width: 90%;
     margin: 10px auto;
     display: flex;
     flex-direction: column;
-    height: auto;
+    align-items: center;
 }
 
 .dateWrapp span {

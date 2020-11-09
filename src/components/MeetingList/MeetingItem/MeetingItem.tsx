@@ -14,7 +14,7 @@ type MeetingItemPropsType ={
     "meetupDate": string,
     "city": string,
     "createdByUser": string,
-    "users": null
+    "users": []
 }
 
 const MeetingItem = (props: MeetingItemPropsType) => {

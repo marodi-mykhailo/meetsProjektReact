@@ -5,7 +5,7 @@ import {AvatarGroup} from "@material-ui/lab";
 import Avatar from "@material-ui/core/Avatar";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
-import {getList, getMyMeetUps, MeetUpDataType} from "../../redux/meetUpReduser";
+import {getList, getMyMeetUps, MeetUpDataType} from "../../redux/meetUpsListReduser";
 import Container from '@material-ui/core/Container';
 
 const img = 'https://secure.meetupstatic.com/photos/event/a/8/4/e/highres_486643086.jpeg'

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {MeetUpReducerInitialState} from "./meetUpReduser";
+import {MeetUpDataType, MeetUpReducerInitialState} from "./meetUpsListReduser";
 
 export const instance = axios.create({
     baseURL: 'https://connectusweb20201107204235.azurewebsites.net/api/',
@@ -31,6 +31,9 @@ export const meetUpAPI = {
     },
     getMyMeetUps() {
         return instance.get<ResponseType>('/admin/meetups')
+    },
+    getMeetUpItem(meetUpId: string) {
+        return instance.get<ResponseType<MeetUpDataType>>(`/home/${meetUpId}`)
     }
 }
 
