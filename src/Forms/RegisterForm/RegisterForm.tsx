@@ -82,7 +82,7 @@ const RegisterForm = () => {
     }
 
     if (isRegister) {
-        return <Redirect to={'/login'}/>
+        return <Redirect to={'/'}/>
     }
     return (
         <Formik initialValues={initialValues}

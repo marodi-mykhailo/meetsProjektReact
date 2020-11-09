@@ -38,9 +38,9 @@ const setMe = (meData: MeDataType) => ({
     type: "SET_ME", meData
 } as const)
 
-export const getMe = () => {
+export const getMeTC = () => {
     return (dispatch: Dispatch) => {
-        dispatch(setAppStatusAC("loading"))
+        dispatch(setAppStatusAC("idle"))
         authAPI.me()
             .then(res => {
                 if (res.data.resultCode === 0) {

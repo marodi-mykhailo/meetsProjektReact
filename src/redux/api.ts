@@ -3,6 +3,7 @@ import {MeetUpReducerInitialState} from "./meetUpReduser";
 
 export const instance = axios.create({
     baseURL: 'https://connectusweb20201107204235.azurewebsites.net/api/',
+    withCredentials: true
 })
 
 export type ResponseType<D = null> = {
@@ -19,7 +20,7 @@ export const authAPI = {
         return instance.post<ResponseType>('account/login', {email, password, rememberMe})
     },
     me() {
-        return instance.get<ResponseType>('/account')
+        return instance.get<ResponseType>('account/myAccount')
     }
 
 }
@@ -27,5 +28,9 @@ export const authAPI = {
 export const meetUpAPI = {
     getList() {
         return instance.get<ResponseType<MeetUpReducerInitialState>>('home')
+    },
+    getMyMeetUps() {
+        return instance.get<ResponseType>('/admin/meetups')
     }
 }
+

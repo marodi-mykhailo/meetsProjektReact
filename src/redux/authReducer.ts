@@ -76,7 +76,6 @@ export const login = (email: string, password: string, rememberMe: boolean) => {
         authAPI.login(email, password, rememberMe)
             .then(res => {
                 if (res.data.resultCode === 0) {
-                    debugger
                     dispatch(setIsAuth())
                 }
             }).catch(error => {

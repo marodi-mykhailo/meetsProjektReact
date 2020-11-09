@@ -13,19 +13,19 @@ import CreateMeet from "./components/CreateMeet/CreateMeet";
 import {LinearProgress} from "@material-ui/core";
 import {AppStateType} from "./redux/store";
 import {RequestStatusType} from "./redux/appReducer";
-import {getMe} from "./redux/userReducer";
+import {getMeTC} from "./redux/userReducer";
 import MyMeetUps from "./components/MyMeetUps/MyMeetUps";
 
 
 function App() {
-    const appStatus = useSelector<AppStateType, RequestStatusType>(state => state.app.status)
     const dispatch = useDispatch()
+    const appStatus = useSelector<AppStateType, RequestStatusType>(state => state.app.status)
     useEffect(() => {
-        dispatch(getMe())
+        dispatch(getMeTC())
     }, [])
     return (
         <div>
-            <Header/>
+            <Route exact path={['/', '/createMeet', '/myMeetUps', '/list' ]} render={()=> <Header/>}/>
             {appStatus === 'loading' && <LinearProgress/>}
             <Switch>
                 <Route exact path={'/register'}

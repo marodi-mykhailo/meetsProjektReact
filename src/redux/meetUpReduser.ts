@@ -78,3 +78,15 @@ export const getList = () => {
             })
     }
 }
+
+export const getMyMeetUps = () =>{
+    return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC('loading'))
+        meetUpAPI.getMyMeetUps()
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(setAppStatusAC('succeeded'))
+                }
+            })
+    }
+}
