@@ -10,13 +10,13 @@ import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {getMeetUpItem} from "../../redux/meetUpReducer";
 import {AppStateType} from "../../redux/store";
-import {MeetUpDataType} from "../../redux/meetUpsListReduser";
+import {MeetUpResponseDataType} from "../../redux/meetUpsListReduser";
 
 const img = 'https://secure.meetupstatic.com/photos/event/a/8/4/e/highres_486643086.jpeg'
 
 const participants = Array(1, 13, 123, 1, 231, 23, 1231, 32, 123, 12)
 
-type PathParamType = {
+export type PathParamType = {
     meetUpId: string
 }
 
@@ -24,7 +24,7 @@ const MeetItem = (props: RouteComponentProps<PathParamType>) => {
     const dispatch = useDispatch()
     let meetId = props.match.params.meetUpId
 
-    const meetUpItem = useSelector<AppStateType, MeetUpDataType>(state => state.meetUpItem)
+    const meetUpItem = useSelector<AppStateType, MeetUpResponseDataType>(state => state.meetUpItem)
 
     useEffect(() => {
         dispatch(getMeetUpItem(meetId))
@@ -69,7 +69,7 @@ const MeetItem = (props: RouteComponentProps<PathParamType>) => {
                             <div className={s.rightWrapper}>
                                 <Paper elevation={3} className={s.paper}>
                                     <div className={s.meet}>
-                                        <img className={s.smallImg} src={img} alt={''}/>
+                                        <img className={s.smallImg} src={meetUpItem.meetupImgPath} alt={''}/>
                                         <div className={s.meetInfo}>
                                             <div className={s.meetName}>{meetUpItem.title}</div>
                                             <div className={s.meetType}>Открытая группа</div>

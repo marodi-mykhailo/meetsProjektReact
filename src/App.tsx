@@ -15,6 +15,7 @@ import {AppStateType} from "./redux/store";
 import {RequestStatusType} from "./redux/appReducer";
 import {getMeTC} from "./redux/userReducer";
 import MyMeetUps from "./components/MyMeetUps/MyMeetUps";
+import EditMeetUp from "./components/EditMeetUp/EditMeetUp";
 
 
 function App() {
@@ -50,6 +51,11 @@ function App() {
                 <Route exact path={'/createMeet'}
                        render={() =>
                            <CreateMeet/>
+                       }
+                />
+                <Route exact path={'/editMeetUp/:meetUpId'}
+                       render={() =>
+                           <EditMeetUp/>
                        }
                 />
                 <Route exact path={'/myMeetUps'}

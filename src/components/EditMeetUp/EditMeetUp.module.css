@@ -1,25 +1,25 @@
-.wrapp{
+.wrapp {
     margin-top: 30px;
 }
 
-.form{
+.form {
     width: 500px;
 }
 
 
-.form input{
+.form input {
     margin: 20px 0;
 }
 
-.descr{
+.descr {
     margin-top: 20px !important;
 }
 
-.imgWrapp{
+.imgWrapp {
     margin: 10px auto;
 }
 
-.imgWrapp img{
+.imgWrapp img {
     width: 200px;
     height: 200px;
 }

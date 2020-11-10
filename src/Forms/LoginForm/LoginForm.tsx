@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../redux/authReducer";
 import {Checkbox, FormControlLabel} from "@material-ui/core";
 import {Switch} from "formik-material-ui";
+import {getMeTC} from "../../redux/userReducer";
 
 
 type InitialValuesFormikType = {
@@ -69,9 +70,9 @@ const LoginForm = () => {
         dispatch(login(values.email, values.password, values.check))
     }
 
-    if (isLoggedIn) {
-        return <Redirect to={'/'}/>
-    }
+    // if (isLoggedIn) {
+    //     return <Redirect to={'/'}/>
+    // }
 
     return (
         <Formik initialValues={initialValues}

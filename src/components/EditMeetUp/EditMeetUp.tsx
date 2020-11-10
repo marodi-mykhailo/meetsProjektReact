@@ -1,14 +1,16 @@
-import React from 'react';
-import s from './CreateMeet.module.css'
+import React, {useEffect} from 'react';
+import s from './EditMeetUp.module.css'
 import {Formik, useFormik} from "formik";
 import {createStyles, FormControl, FormGroup, Grid, Input, TextField, Theme} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import * as Yup from "yup";
 import {useDispatch, useSelector} from "react-redux";
-import {createMeetUpTC} from "../../redux/meetUpsListReduser";
 import {AppStateType} from "../../redux/store";
-import { Redirect } from 'react-router-dom';
+import {MeetUpResponseDataType} from "../../redux/meetUpsListReduser";
+import {getMeetUpItem} from "../../redux/meetUpReducer";
+import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {PathParamType} from "../MeetItem/MeetItem";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,19 +43,30 @@ type FormikErrorType = {
     meetupImgPath?: string
 }
 
-const CreateMeet = () => {
-
+const EditMeetUp = (props: RouteComponentProps<PathParamType>) => {
     const dispatch = useDispatch()
-    const isCreated = useSelector<AppStateType, boolean>(state => state.meetUp.isCreated)
+    let meetId = props.match.params.meetUpId
+
+    const meetUpItem = useSelector<AppStateType, MeetUpResponseDataType>(state => state.meetUpItem)
+    debugger
+    useEffect(() => {
+        dispatch(getMeetUpItem(meetId))
+    }, [])
+
+    let title = meetUpItem.title
+    let description = meetUpItem.description
+    let meetupDate = meetUpItem.meetupDate
+    let city = meetUpItem.city
+    let meetupImgPath = meetUpItem.meetupImgPath
 
     const classes = useStyles();
     const formik = useFormik({
         initialValues: {
-            title: "",
-            description: "",
-            meetupDate: "",
-            city: "",
-            meetupImgPath: ""
+            title: title,
+            description: description,
+            meetupDate: meetupDate,
+            city: city,
+            meetupImgPath: meetupImgPath
         },
         validate: (values) => {
             const errors: FormikErrorType = {};
@@ -77,13 +90,9 @@ const CreateMeet = () => {
             return errors;
         },
         onSubmit: values => {
-           dispatch(createMeetUpTC(values))
+            alert(JSON.stringify(values));
         },
     })
-
-    if(isCreated){
-        return <Redirect to={'/myMeetUps'}/>
-    }
 
     return (
         <section className={s.wrapp}>
@@ -91,7 +100,7 @@ const CreateMeet = () => {
                   direction={'column'}
                   justify="center"
                   alignItems={'center'}>
-                <h1>Create MeetUp </h1>
+                <h1>Edit MeetUp </h1>
                 <form onSubmit={formik.handleSubmit} className={s.form}>
                     <FormGroup>
 
@@ -141,7 +150,8 @@ const CreateMeet = () => {
                         />
                         {formik.errors.meetupDate ?
                             <div style={{color: 'red', marginTop: '5px'}}>{formik.errors.meetupDate}</div> : null}
-                        <Button className={s.btn} type={'submit'} variant={'contained'} color={'primary'}>Create meetUp</Button>
+                        <Button className={s.btn} type={'submit'} variant={'contained'} color={'primary'}>Edit
+                            meetUp</Button>
                     </FormGroup>
                 </form>
             </Grid>
@@ -149,4 +159,4 @@ const CreateMeet = () => {
     );
 };
 
-export default CreateMeet;
+export default withRouter(EditMeetUp);

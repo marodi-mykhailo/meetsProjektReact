@@ -1,9 +1,10 @@
 import axios from 'axios'
-import {MeetUpDataType, MeetUpReducerInitialState} from "./meetUpsListReduser";
+import {MeetUpResponseDataType, MeetUpReducerInitialState, MeetUpDataType} from "./meetUpsListReduser";
 
 export const instance = axios.create({
+    withCredentials: true,
     baseURL: 'https://connectusweb20201107204235.azurewebsites.net/api/',
-    withCredentials: true
+    headers: {"Access-Control-Allow-Origin": "*"}
 })
 
 export type ResponseType<D = null> = {
@@ -11,7 +12,6 @@ export type ResponseType<D = null> = {
     message: Array<string>
     data: D
 }
-
 export const authAPI = {
     register(username: string, email: string, password: string, confirmPassword: string) {
         return instance.post<ResponseType>('account/register', {username, email, password, confirmPassword})
@@ -21,6 +21,9 @@ export const authAPI = {
     },
     me() {
         return instance.get<ResponseType>('account/myAccount')
+    },
+    logOut() {
+        return instance.get('account/logout')
     }
 
 }
@@ -30,10 +33,16 @@ export const meetUpAPI = {
         return instance.get<ResponseType<MeetUpReducerInitialState>>('home')
     },
     getMyMeetUps() {
-        return instance.get<ResponseType>('/admin/meetups')
+        return instance.get<ResponseType<Array<MeetUpResponseDataType>>>('admin/meetups')
     },
     getMeetUpItem(meetUpId: string) {
-        return instance.get<ResponseType<MeetUpDataType>>(`/home/${meetUpId}`)
+        return instance.get<ResponseType<MeetUpResponseDataType>>(`home/${meetUpId}`)
+    },
+    createMeetUp(meetUpData:MeetUpDataType) {
+        return instance.post<ResponseType<MeetUpResponseDataType>>('admin/meetups', meetUpData)
+    },
+    deleteMeetUp(meetUpId: string){
+        return instance.delete<ResponseType>(`admin/meetups/${meetUpId}`)
     }
 }
 

@@ -1,5 +1,6 @@
 import {authAPI} from "./api";
 import {Dispatch} from "redux";
+import {getMeTC} from "./userReducer";
 
 
 type AuthInitialState = {

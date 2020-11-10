@@ -1,9 +1,9 @@
-import {MeetUpDataType} from "./meetUpsListReduser";
+import {MeetUpResponseDataType, setMeetUps} from "./meetUpsListReduser";
 import {Dispatch} from "redux";
 import {setAppStatusAC} from "./appReducer";
 import {meetUpAPI} from "./api";
 
-const meetUpItem: MeetUpDataType = {
+const meetUpItem: MeetUpResponseDataType = {
     id: '1',
     title: "1 Test title",
     description: "Test description by the way, ok?",
@@ -20,6 +20,7 @@ type meetUpReducerAction = |ReturnType<typeof setMeetUpItem>
 export const meetUpReducer = (state = meetUpItem, action: meetUpReducerAction) => {
     switch (action.type) {
         case "SET_MEET_UP_ITEM":
+            debugger
             return {
                 ...state,
                 ...action.meetUpData
@@ -29,7 +30,7 @@ export const meetUpReducer = (state = meetUpItem, action: meetUpReducerAction) =
     }
 }
 
-const setMeetUpItem = (meetUpData: MeetUpDataType) => ({
+const setMeetUpItem = (meetUpData: MeetUpResponseDataType) => ({
     type: 'SET_MEET_UP_ITEM',
     meetUpData
 } as const)
@@ -38,7 +39,16 @@ export const getMeetUpItem = (meetUpId: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'))
     meetUpAPI.getMeetUpItem(meetUpId)
         .then(res => {
+            debugger
             dispatch(setMeetUpItem(res.data.data))
             dispatch(setAppStatusAC('succeeded'))
-        })
+        }).catch(error => {
+        if (!error.response) {
+            // network error
+            console.log('Error: Network Error');
+        } else {
+            console.log(error.response.data.message);
+        }
+    })
 }
+

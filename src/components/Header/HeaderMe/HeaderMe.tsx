@@ -12,6 +12,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons";
 import {Avatar} from "@material-ui/core";
 import {Photoczka} from "../../MeetItem/ParticipantsItem/ParticipantsItem";
+import {useDispatch} from "react-redux";
+import {logOut} from "../../../redux/userReducer";
+import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,6 +32,7 @@ export default function HeaderMe() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
+    const dispatch = useDispatch()
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
@@ -49,6 +53,10 @@ export default function HeaderMe() {
         }
     }
 
+    const onClickHandler = () => {
+        dispatch(logOut())
+    }
+
     // return focus to the button when we transitioned from !open -> open
     const prevOpen = React.useRef(open);
     React.useEffect(() => {
@@ -62,16 +70,19 @@ export default function HeaderMe() {
     return (
         <div className={s.wrapper}>
             <div className={s.btnWrapp}>
-                <Button variant="outlined"
-                        color="secondary"
-                        className={s.createBtn}>
-                    Secondary
-                </Button>
+                <NavLink to={'/createMeet'} className={s.link}>
+                    <Button variant="outlined"
+                            color="secondary"
+                            className={s.createBtn}
+                    >
+                        Create MeetUp
+                    </Button>
+                </NavLink>
             </div>
             <div className={s.meWrapp}>
                 <Avatar alt="Remy Sharp" className={classes.large + ' ' + s.avatar} src={Photoczka}/>
                 <div className={classes.root}>
-                    <div>
+                    <div className={s.btnWrapp}>
                         <Button
                             ref={anchorRef}
                             aria-controls={open ? 'menu-list-grow' : undefined}
@@ -93,7 +104,7 @@ export default function HeaderMe() {
                                                       onKeyDown={handleListKeyDown}>
                                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                                                 <MenuItem onClick={handleClose}>My account</MenuItem>
-                                                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                                <MenuItem onClick={onClickHandler}>Logout</MenuItem>
                                             </MenuList>
                                         </ClickAwayListener>
                                     </Paper>
