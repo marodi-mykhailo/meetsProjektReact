@@ -1,6 +1,8 @@
 import axios from 'axios'
-import {MeetUpResponseDataType, MeetUpReducerInitialState, MeetUpDataType} from "./meetUpsListReduser";
+import {MeetUpResponseDataType, MeetUpReducerInitialState, MeetUpDataType, SortState} from "./meetUpsListReduser";
 import {EditedValueType} from "../components/EditMeetUp/EditMeetUp";
+import {UserDataType} from "./userReducer";
+import {EditedUserDataType} from "../components/MyProfile/MyProfile";
 
 export const instance = axios.create({
     withCredentials: true,
@@ -20,9 +22,6 @@ export const authAPI = {
     login(email: string, password: string, rememberMe: boolean) {
         return instance.post<ResponseType>('account/login', {email, password, rememberMe})
     },
-    me() {
-        return instance.get<ResponseType>('account/myAccount')
-    },
     logOut() {
         return instance.get('account/logout')
     }
@@ -30,8 +29,11 @@ export const authAPI = {
 }
 
 export const meetUpAPI = {
-    getList() {
-        return instance.get<ResponseType<MeetUpReducerInitialState>>('home')
+    getList(page: number = 1, searchQuery: string = '', sortState: SortState = 0,
+            isDescending: boolean = false, meetupsCount: number = 8) {
+        return instance.get<ResponseType<MeetUpReducerInitialState>>
+        (`home?page=${page}&searchQuery=${searchQuery}
+        &sortState=${sortState}&isDescending=${isDescending}&meetupsCount=${meetupsCount}`)
     },
     getMyMeetUps() {
         return instance.get<ResponseType<Array<MeetUpResponseDataType>>>('admin/meetups')
@@ -56,3 +58,14 @@ export const meetUpAPI = {
     }
 }
 
+export const userAPI = {
+    me() {
+        return instance.get<ResponseType<UserDataType>>('account/myAccount')
+    },
+    editProfile(editedData: EditedUserDataType) {
+        return instance.put<ResponseType<EditedUserDataType>>('account', editedData)
+    },
+    deleteProfile(){
+        return instance.delete<ResponseType>('account')
+    }
+}

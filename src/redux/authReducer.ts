@@ -49,7 +49,7 @@ const setRegister = () => ({
     type: 'SET_REGISTER'
 } as const)
 
-const setIsAuth = () => ({
+export const setIsAuth = () => ({
     type: 'SET_IS_AUTH'
 } as const)
 

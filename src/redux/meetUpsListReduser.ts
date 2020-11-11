@@ -15,6 +15,12 @@ export type MeetUpResponseDataType = {
     users: []
 }
 
+export enum SortState {
+    Title = 0,
+    MeetupDate = 1,
+    City = 2
+}
+
 type PageViewDataType = {
     pageNumber: number,
     totalPages: number,
@@ -156,10 +162,11 @@ export const unJoin = (meetUpId: string) => ({
     type: 'UNJOIN', meetUpId
 } as const)
 
-export const getList = () => {
+export const getList = (page: number = 1, searchQuery: string = '', sortState: SortState = 0,
+                        isDescending: boolean = false, meetupsCount: number = 8) => {
     return (dispatch: Dispatch) => {
         dispatch(setAppStatusAC('loading'))
-        meetUpAPI.getList()
+        meetUpAPI.getList(page, searchQuery, sortState, isDescending, meetupsCount)
             .then(res => {
                 if (res.data.resultCode === 0) {
                     dispatch(setMeetUps(res.data.data.meetups))

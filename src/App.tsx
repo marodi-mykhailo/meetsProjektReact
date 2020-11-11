@@ -16,6 +16,7 @@ import {RequestStatusType} from "./redux/appReducer";
 import {getMeTC} from "./redux/userReducer";
 import MyMeetUps from "./components/MyMeetUps/MyMeetUps";
 import EditMeetUp from "./components/EditMeetUp/EditMeetUp";
+import MyProfile from "./components/MyProfile/MyProfile";
 
 
 function App() {
@@ -26,7 +27,8 @@ function App() {
     }, [])
     return (
         <div>
-            <Route exact path={['/', '/createMeet', '/myMeetUps', '/meetUp' ]} render={()=> <Header/>}/>
+            <Route exact path={['/', '/createMeet', '/myMeetUps','/meetUp','/editMeetUp','/myProfile']}
+                   render={() => <Header/>}/>
             {appStatus === 'loading' && <LinearProgress/>}
             <Switch>
                 <Route exact path={'/register'}
@@ -60,6 +62,9 @@ function App() {
                 />
                 <Route exact path={'/myMeetUps'}
                        render={() => <MyMeetUps/>}
+                />
+                <Route exact path={'/myProfile'}
+                       render={() => <MyProfile/>}
                 />
                 <Route exact path={'/meetUp/:meetUpId?'} render={() => <MeetItem/>}/>
                 <Route exact path={'/404'} render={() => <h1>404 Not found</h1>}/>

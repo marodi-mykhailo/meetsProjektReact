@@ -70,9 +70,9 @@ const LoginForm = () => {
         dispatch(login(values.email, values.password, values.check))
     }
 
-    // if (isLoggedIn) {
-    //     return <Redirect to={'/'}/>
-    // }
+    if (isLoggedIn) {
+        return <Redirect to={'/'}/>
+    }
 
     return (
         <Formik initialValues={initialValues}

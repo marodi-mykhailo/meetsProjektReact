@@ -11,10 +11,10 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons";
 import {Avatar} from "@material-ui/core";
-import {Photoczka} from "../../MeetItem/ParticipantsItem/ParticipantsItem";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {logOut} from "../../../redux/userReducer";
 import {NavLink} from "react-router-dom";
+import {AppStateType} from "../../../redux/store";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,6 +32,9 @@ export default function HeaderMe() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+    const img = useSelector<AppStateType, string>(state => state.user.userData.userImgPath)
+
     const dispatch = useDispatch()
 
     const handleToggle = () => {
@@ -42,7 +45,6 @@ export default function HeaderMe() {
         if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
             return;
         }
-
         setOpen(false);
     };
 
@@ -80,7 +82,7 @@ export default function HeaderMe() {
                 </NavLink>
             </div>
             <div className={s.meWrapp}>
-                <Avatar alt="Remy Sharp" className={classes.large + ' ' + s.avatar} src={Photoczka}/>
+                <Avatar alt="Remy Sharp" className={classes.large + ' ' + s.avatar} src={img}/>
                 <div className={classes.root}>
                     <div className={s.btnWrapp}>
                         <Button
@@ -102,21 +104,23 @@ export default function HeaderMe() {
                                         <ClickAwayListener onClickAway={handleClose}>
                                             <MenuList autoFocusItem={open} id="menu-list-grow"
                                                       onKeyDown={handleListKeyDown}>
-                                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-
+                                                <NavLink to={'/myProfile'} className={s.link}>
+                                                    <MenuItem onClick={handleClose}>
+                                                        My Profile
+                                                    </MenuItem>
+                                                </NavLink>
                                                 <NavLink to={'/myMeetUps'} className={s.link}>
                                                     <MenuItem onClick={handleClose}>
                                                         My meetUps
-                                                       </MenuItem>
+                                                    </MenuItem>
                                                 </NavLink>
-
                                                 <MenuItem onClick={onClickHandler}>Logout
-                                            </MenuItem>
-                                        </MenuList>
-                                    </ClickAwayListener>
-                                </Paper>
+                                                </MenuItem>
+                                            </MenuList>
+                                        </ClickAwayListener>
+                                    </Paper>
                                 </Grow>
-                                )}
+                            )}
                         </Popper>
                     </div>
                 </div>
