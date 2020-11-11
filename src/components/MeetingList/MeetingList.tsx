@@ -12,17 +12,18 @@ import Switch from "@material-ui/core/Switch";
 import FormGroup from "@material-ui/core/FormGroup";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
-
-const arr = Array(1, 3, 4, 5, 6, 7, 4, 6, 7)
+import {Pagination} from "@material-ui/lab";
 
 const MeetingList = () => {
+    const totalPages = useSelector<AppStateType, number>(state => state.meetUp.pageView.totalPages)
     const meets = useSelector<AppStateType, Array<MeetUpResponseDataType>>(state => state.meetUp.meetups)
-    const dispatch = useDispatch()
+
     const [searchQuery, setSearchQuery] = useState('')
     const [sortState, setSortState] = useState<SortState>(0)
     const [isDescending, setIsDescending] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
     const [activeBtn, setActiveBtn] = useState<SortState>(0)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getList())
@@ -36,62 +37,68 @@ const MeetingList = () => {
         dispatch(getList(page, searchQuery, sortState, isDescending))
     }
 
-    const titleFocusHandler = () => {
+    const titleFocusHandler = (value: SortState) => {
         setActiveBtn(0)
         setSortState(0)
-        dispatch(getList(page, searchQuery, 0, isDescending))
+        dispatch(getList(page, searchQuery, value, isDescending))
     }
 
-    const dateFocusHandler = () => {
+    const dateFocusHandler = (value: SortState) => {
         setActiveBtn(1)
         setSortState(1)
-        dispatch(getList(page, searchQuery, 1, isDescending))
+        dispatch(getList(page, searchQuery, value, isDescending))
 
     }
 
-    const cityFocusHandler = () => {
+    const cityFocusHandler = (value: SortState) => {
         setActiveBtn(2)
         setSortState(2)
-        dispatch(getList(page, searchQuery, 2, isDescending))
+        dispatch(getList(page, searchQuery, value, isDescending))
     }
 
-    const isDescendingHandler = () => {
-        setIsDescending(!isDescending)
+    const isDescendingHandler = (isDescending: boolean) => {
+        setIsDescending(isDescending)
         dispatch(getList(page, searchQuery, sortState, isDescending))
     }
+
+    const pageChangeHandler = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+        dispatch(getList(value, searchQuery, sortState, isDescending))
+    };
 
     return (
         <div>
             <h1 className={s.h1}>All meetings</h1>
-            <Container>
+            <Container className={s.nav}>
                 <Breadcrumbs aria-label="breadcrumb">
                     <Input value={searchQuery} onChange={searchQueryHandler}/>
                     <FontAwesomeIcon icon={faSearch} className={s.search} onClick={searchQueryClickHandler}/>
                     <Button color={activeBtn === 0 ? "primary" : undefined}
                             variant={activeBtn === 0 ? "contained" : undefined}
-                            onClick={titleFocusHandler}
+                            onClick={() => titleFocusHandler(0)}
                     >
                         Title
                     </Button>
                     <Button color={activeBtn === 1 ? "primary" : undefined}
                             variant={activeBtn === 1 ? "contained" : undefined}
-                            onClick={dateFocusHandler}
+                            onClick={() => dateFocusHandler(1)}
                     >
                         MeetupDate
                     </Button>
                     <Button color={activeBtn === 2 ? "primary" : undefined}
                             variant={activeBtn === 2 ? "contained" : undefined}
-                            onClick={cityFocusHandler}
+                            onClick={() => cityFocusHandler(2)}
                     >
                         City
                     </Button>
 
                     <FormControlLabel style={{margin: 0}}
                                       control={<Switch size="small" checked={isDescending}
-                                                       onChange={isDescendingHandler}/>}
+                                                       onChange={() => isDescendingHandler(!isDescending)}/>}
                                       label="DESC"
                     />
                 </Breadcrumbs>
+                <Pagination count={totalPages} color="primary" page={page} onChange={pageChangeHandler}/>
             </Container>
             <Container className={s.list}>
                 {meets.map(item => {

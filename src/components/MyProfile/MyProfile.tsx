@@ -8,7 +8,14 @@ import s from "./MyProfile.module.css";
 import {createStyles, FormGroup, Grid, Input, Snackbar, TextField, Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core/styles";
-import {editUserDataTC, getMeTC, MeDataType, setUserDataIsEdited, UserDataType} from "../../redux/userReducer";
+import {
+    deleteProfile,
+    editUserDataTC,
+    getMeTC,
+    MeDataType,
+    setUserDataIsEdited,
+    UserDataType
+} from "../../redux/userReducer";
 import {Alert} from "@material-ui/lab";
 
 type FormikErrorType = {
@@ -47,6 +54,7 @@ const MyProfile = (props: RouteComponentProps) => {
 
     const me = useSelector<AppStateType, UserDataType>(state => state.user.userData)
     const isUserDataEdited = useSelector<AppStateType, boolean>(state => state.user.isEdited)
+    const isAuth = useSelector<AppStateType, boolean>(state => state.auth.isAuth)
 
     useEffect(() => {
         dispatch(getMeTC())
@@ -66,7 +74,7 @@ const MyProfile = (props: RouteComponentProps) => {
         },
         validate: (values) => {
             const errors: FormikErrorType = {};
-             if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+            if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                 errors.email = 'Invalid email address';
             }
             if (values.description.length < 20) {
@@ -87,9 +95,14 @@ const MyProfile = (props: RouteComponentProps) => {
         dispatch(setUserDataIsEdited(false));
     };
 
-    // if (isCreated) {
-    //     return <Redirect to={'/myMeetUps'}/>
-    // }
+    const deleteHandler = () => {
+        dispatch(deleteProfile())
+    }
+
+
+    if (!isAuth) {
+        return <Redirect to={'/login'}/>
+    }
 
     return (
         <section className={s.wrapp}>
@@ -160,6 +173,12 @@ const MyProfile = (props: RouteComponentProps) => {
                             <Button onClick={() => props.history.goBack()} className={s.btn} variant={'contained'}
                                     color={'secondary'}>
                                 Get back
+                            </Button>
+                        </NavLink>
+                        <NavLink to={'/'} className={s.link}>
+                            <Button onClick={deleteHandler} className={s.btn} variant={'outlined'}
+                                    color={'secondary'}>
+                                Delete Profile
                             </Button>
                         </NavLink>
                     </FormGroup>

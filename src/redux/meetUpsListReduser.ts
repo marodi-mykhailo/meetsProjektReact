@@ -78,6 +78,7 @@ type MeetUpReducerActionType =
     | ReturnType<typeof setIsEdited>
     | ReturnType<typeof join>
     | ReturnType<typeof unJoin>
+    | ReturnType<typeof setPageData>
 
 
 export const meetUpListReducer = (state = initialState, action: MeetUpReducerActionType): MeetUpReducerInitialState => {
@@ -86,6 +87,11 @@ export const meetUpListReducer = (state = initialState, action: MeetUpReducerAct
             return {
                 ...state,
                 meetups: action.meetUps.map(tl => ({...tl}))
+            }
+        case "SET_PAGE_DATA":
+            return {
+                ...state,
+                pageView: action.pageData
             }
         case "CREATE_MEET_UP":
             return {
@@ -130,7 +136,11 @@ export const meetUpListReducer = (state = initialState, action: MeetUpReducerAct
 }
 
 export const setMeetUps = (meetUps: Array<MeetUpResponseDataType>) => ({
-    type: 'SET_MEET_UPS', meetUps
+    type: "SET_MEET_UPS", meetUps
+} as const)
+
+export const setPageData = (pageData: PageViewDataType) => ({
+    type: "SET_PAGE_DATA", pageData
 } as const)
 
 
@@ -168,8 +178,10 @@ export const getList = (page: number = 1, searchQuery: string = '', sortState: S
         dispatch(setAppStatusAC('loading'))
         meetUpAPI.getList(page, searchQuery, sortState, isDescending, meetupsCount)
             .then(res => {
+                debugger
                 if (res.data.resultCode === 0) {
                     dispatch(setMeetUps(res.data.data.meetups))
+                    dispatch(setPageData(res.data.data.pageView))
                     dispatch(setAppStatusAC('succeeded'))
                 }
             }).catch(error => {

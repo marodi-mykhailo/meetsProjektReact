@@ -38,7 +38,7 @@ export const authReducer = (state = authInitialState, action: ActionType) => {
         case "SET_IS_AUTH":
             return {
                 ...state,
-                isAuth: true
+                isAuth: action.isAuth
             }
         default:
             return state
@@ -49,8 +49,8 @@ const setRegister = () => ({
     type: 'SET_REGISTER'
 } as const)
 
-export const setIsAuth = () => ({
-    type: 'SET_IS_AUTH'
+export const setIsAuth = (isAuth: boolean) => ({
+    type: 'SET_IS_AUTH', isAuth
 } as const)
 
 
@@ -77,7 +77,7 @@ export const login = (email: string, password: string, rememberMe: boolean) => {
         authAPI.login(email, password, rememberMe)
             .then(res => {
                 if (res.data.resultCode === 0) {
-                    dispatch(setIsAuth())
+                    dispatch(setIsAuth(true))
                 }
             }).catch(error => {
             if (!error.response) {

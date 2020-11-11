@@ -23,7 +23,7 @@ export const authAPI = {
         return instance.post<ResponseType>('account/login', {email, password, rememberMe})
     },
     logOut() {
-        return instance.get('account/logout')
+        return instance.get<ResponseType>('account/logout')
     }
 
 }

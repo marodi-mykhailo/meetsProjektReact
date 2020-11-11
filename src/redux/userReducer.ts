@@ -82,7 +82,7 @@ export const getMeTC = () => {
                 debugger
                 if (res.data.resultCode === 0) {
                     dispatch(setMe(res.data.data))
-                    dispatch(setIsAuth())
+                    dispatch(setIsAuth(true))
                     dispatch(setAppStatusAC("succeeded"))
                 }
             }).catch(error => {
@@ -121,6 +121,34 @@ export const logOut = () => {
     return (dispatch: Dispatch) => {
         authAPI.logOut()
             .then(res => {
-            })
+                if (res.data.data === 0) {
+                    dispatch(setIsAuth(false))
+                }
+            }).catch(error => {
+            if (!error.response) {
+                // network error
+                console.log('Error: Network Error');
+            } else {
+                console.log(error.response.data.message);
+            }
+        })
+    }
+}
+
+export const deleteProfile = () => {
+    return (dispatch: Dispatch) => {
+        userAPI.deleteProfile()
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(setIsAuth(false))
+                }
+            }).catch(error => {
+            if (!error.response) {
+                // network error
+                console.log('Error: Network Error');
+            } else {
+                console.log(error.response.data.message);
+            }
+        })
     }
 }

@@ -25,3 +25,8 @@
     transition: color .5s;
     color: #715AFF;
 }
+
+.nav{
+    display: flex;
+    justify-content: space-between;
+}
