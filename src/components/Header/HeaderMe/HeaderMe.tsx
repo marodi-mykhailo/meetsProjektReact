@@ -103,13 +103,20 @@ export default function HeaderMe() {
                                             <MenuList autoFocusItem={open} id="menu-list-grow"
                                                       onKeyDown={handleListKeyDown}>
                                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                                <MenuItem onClick={handleClose}>My account</MenuItem>
-                                                <MenuItem onClick={onClickHandler}>Logout</MenuItem>
-                                            </MenuList>
-                                        </ClickAwayListener>
-                                    </Paper>
+
+                                                <NavLink to={'/myMeetUps'} className={s.link}>
+                                                    <MenuItem onClick={handleClose}>
+                                                        My meetUps
+                                                       </MenuItem>
+                                                </NavLink>
+
+                                                <MenuItem onClick={onClickHandler}>Logout
+                                            </MenuItem>
+                                        </MenuList>
+                                    </ClickAwayListener>
+                                </Paper>
                                 </Grow>
-                            )}
+                                )}
                         </Popper>
                     </div>
                 </div>

@@ -7,9 +7,9 @@ import Button from "@material-ui/core/Button";
 import * as Yup from "yup";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/store";
-import {MeetUpResponseDataType} from "../../redux/meetUpsListReduser";
+import {editMeetUp, editMeetUpTC, MeetUpResponseDataType} from "../../redux/meetUpsListReduser";
 import {getMeetUpItem} from "../../redux/meetUpReducer";
-import {RouteComponentProps, withRouter} from 'react-router-dom';
+import {Redirect, RouteComponentProps, withRouter} from 'react-router-dom';
 import {PathParamType} from "../MeetItem/MeetItem";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,12 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const img = 'https://secure.meetupstatic.com/photos/event/a/8/4/e/highres_486643086.jpeg'
 
-const validate = Yup.object({
-    title: Yup.string().required(),
-    description: Yup.string().required(),
-    city: Yup.string().required(),
-    meetupDate: Yup.date().required(),
-})
 
 type FormikErrorType = {
     title?: string,
@@ -43,30 +37,33 @@ type FormikErrorType = {
     meetupImgPath?: string
 }
 
+export type EditedValueType = {
+    title: string
+    description: string
+    meetupDate: string
+    city: string
+    meetupImgPath: string
+}
+
 const EditMeetUp = (props: RouteComponentProps<PathParamType>) => {
     const dispatch = useDispatch()
     let meetId = props.match.params.meetUpId
 
     const meetUpItem = useSelector<AppStateType, MeetUpResponseDataType>(state => state.meetUpItem)
-    debugger
+    const isEdited = useSelector<AppStateType, boolean>(state => state.meetUp.isEdited)
     useEffect(() => {
         dispatch(getMeetUpItem(meetId))
     }, [])
 
-    let title = meetUpItem.title
-    let description = meetUpItem.description
-    let meetupDate = meetUpItem.meetupDate
-    let city = meetUpItem.city
-    let meetupImgPath = meetUpItem.meetupImgPath
-
     const classes = useStyles();
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            title: title,
-            description: description,
-            meetupDate: meetupDate,
-            city: city,
-            meetupImgPath: meetupImgPath
+            title: meetUpItem.title,
+            description: meetUpItem.description,
+            meetupDate: meetUpItem.meetupDate,
+            city: meetUpItem.city,
+            meetupImgPath: meetUpItem.meetupImgPath
         },
         validate: (values) => {
             const errors: FormikErrorType = {};
@@ -89,10 +86,15 @@ const EditMeetUp = (props: RouteComponentProps<PathParamType>) => {
             }
             return errors;
         },
-        onSubmit: values => {
-            alert(JSON.stringify(values));
+        onSubmit: (values:EditedValueType) => {
+            dispatch(editMeetUpTC(meetId, values))
+            debugger
         },
     })
+
+    if(isEdited){
+        return <Redirect to={'/myMeetUps'}/>
+    }
 
     return (
         <section className={s.wrapp}>

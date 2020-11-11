@@ -10,7 +10,7 @@ import {
     getList,
     getMyMeetUpsTC,
     MeetUpResponseDataType,
-    setIsCreated
+    setIsCreated, setIsEdited
 } from "../../redux/meetUpsListReduser";
 import Container from '@material-ui/core/Container';
 import {Button} from "@material-ui/core";
@@ -25,6 +25,7 @@ const MyMeetUps = () => {
     useEffect(() => {
         dispatch(getMyMeetUpsTC())
         dispatch(setIsCreated(false))
+        dispatch(setIsEdited(false))
     }, [])
 
     const deleteHandler = (meetUpId: string) => {

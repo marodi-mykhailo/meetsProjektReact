@@ -22,7 +22,7 @@ const MeetingList = () => {
             <Container className={s.list}>
                 {meets.map(item => {
                     return (
-                        <NavLink to={'/meetUp/' + item.id} className={s.link} style={{ textDecoration: 'none' }}>
+                        <NavLink to={'/meetUp/' + item.id} className={s.link} style={{textDecoration: 'none'}}>
                             <MeetingItem
                                 id={item.id}
                                 title={item.title}
@@ -31,6 +31,7 @@ const MeetingList = () => {
                                 meetupImgPath={item.meetupImgPath}
                                 meetupDate={item.meetupDate}
                                 createdByUser={item.createdByUser}
+                                joined={item.joined}
                                 users={item.users}
                             />
                         </NavLink>

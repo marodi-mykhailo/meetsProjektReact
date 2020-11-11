@@ -1,6 +1,7 @@
 import {Dispatch} from "redux";
 import {authAPI, meetUpAPI} from "./api";
 import {setAppStatusAC, SetAppStatusActionType} from "./appReducer";
+import {EditedValueType} from "../components/EditMeetUp/EditMeetUp";
 
 export type MeetUpResponseDataType = {
     id: string
@@ -10,6 +11,7 @@ export type MeetUpResponseDataType = {
     meetupDate: string,
     city: string,
     createdByUser: string,
+    joined: boolean,
     users: []
 }
 
@@ -32,7 +34,8 @@ export type MeetUpDataType = {
 export type MeetUpReducerInitialState = {
     meetups: Array<MeetUpResponseDataType>,
     pageView: PageViewDataType,
-    isCreated: boolean
+    isCreated: boolean,
+    isEdited: boolean
 }
 
 
@@ -46,6 +49,7 @@ let initialState: MeetUpReducerInitialState = {
             meetupDate: "2020-11-08T14:00:01.9332275",
             city: "Rzeszow",
             createdByUser: 'a',
+            joined: false,
             users: []
         }
     ],
@@ -55,7 +59,8 @@ let initialState: MeetUpReducerInitialState = {
         hasNextPage: false,
         hasPreviousPage: false
     },
-    isCreated: false
+    isCreated: false,
+    isEdited: false
 }
 
 type MeetUpReducerActionType =
@@ -63,6 +68,10 @@ type MeetUpReducerActionType =
     | ReturnType<typeof createMeetUp>
     | ReturnType<typeof deleteMeetUp>
     | ReturnType<typeof setIsCreated>
+    | ReturnType<typeof editMeetUp>
+    | ReturnType<typeof setIsEdited>
+    | ReturnType<typeof join>
+    | ReturnType<typeof unJoin>
 
 
 export const meetUpListReducer = (state = initialState, action: MeetUpReducerActionType): MeetUpReducerInitialState => {
@@ -80,12 +89,34 @@ export const meetUpListReducer = (state = initialState, action: MeetUpReducerAct
         case "DELETE_MEET_UP":
             return {
                 ...state,
-                meetups: state.meetups.filter(item => item.id != action.meetUpId)
+                meetups: state.meetups.filter(item => item.id !== action.meetUpId)
             }
         case "SET_IS_CREATED":
             return {
                 ...state,
                 isCreated: action.isCreated
+            }
+        case "EDIT_MEET_UP": {
+            return {
+                ...state,
+                meetups: state.meetups.map(item => item.id === action.meetUpId ?
+                    {...item, ...action.editedMeetUpData} : item)
+            }
+        }
+        case "SET_IS_EDITED":
+            return {
+                ...state,
+                isEdited: action.isEdited
+            }
+        case "JOIN":
+            return {
+                ...state,
+                meetups: state.meetups.map(item => item.id === action.meetUpId ? {...item, joined: true} : item)
+            }
+        case "UNJOIN":
+            return {
+                ...state,
+                meetups: state.meetups.map(item => item.id === action.meetUpId ? {...item, joined: false} : item)
             }
         default:
             return state
@@ -107,6 +138,22 @@ export const deleteMeetUp = (meetUpId: string) => ({
 
 export const setIsCreated = (isCreated: boolean) => ({
     type: "SET_IS_CREATED", isCreated
+} as const)
+
+export const setIsEdited = (isEdited: boolean) => ({
+    type: "SET_IS_EDITED", isEdited
+} as const)
+
+export const editMeetUp = (meetUpId: string, editedMeetUpData: EditedValueType) => ({
+    type: "EDIT_MEET_UP", meetUpId, editedMeetUpData
+} as const)
+
+export const join = (meetUpId: string) => ({
+    type: 'JOIN', meetUpId
+} as const)
+
+export const unJoin = (meetUpId: string) => ({
+    type: 'UNJOIN', meetUpId
 } as const)
 
 export const getList = () => {
@@ -180,6 +227,76 @@ export const deleteMeetUpTC = (meetUpId: string) => {
                     dispatch(deleteMeetUp(meetUpId))
                     dispatch(setAppStatusAC("succeeded"))
                 }
-            })
+            }).catch(error => {
+            if (!error.response) {
+                // network error
+                console.log('Error: Network Error');
+            } else {
+                console.log(error.response.data.message);
+            }
+        })
     }
 }
+
+
+export const editMeetUpTC = (meetUpId: string, editedMeetUpData: EditedValueType) => {
+    return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC("loading"))
+        meetUpAPI.editMeetUp(meetUpId, editedMeetUpData)
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(editMeetUp(meetUpId, editedMeetUpData))
+                    dispatch(setIsEdited(true))
+                    dispatch(setAppStatusAC('succeeded'))
+                }
+            }).catch(error => {
+            if (!error.response) {
+                // network error
+                console.log('Error: Network Error');
+            } else {
+                console.log(error.response.data.message);
+            }
+        })
+    }
+}
+
+export const joinTC = (meetUpId: string) => {
+    return (dispatch: Dispatch) => {
+        setAppStatusAC('loading')
+        meetUpAPI.joinMeetUp(meetUpId)
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(setAppStatusAC('succeeded'))
+                    dispatch(join(meetUpId))
+                }
+            }).catch(error => {
+            if (!error.response) {
+                // network error
+                console.log('Error: Network Error');
+            } else {
+                console.log(error.response.data.message);
+            }
+        })
+    }
+}
+
+export const unJoinTC = (meetUpId: string) => {
+    return (dispatch: Dispatch) => {
+        setAppStatusAC('loading')
+        meetUpAPI.unJoinMeetUp(meetUpId)
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(setAppStatusAC('succeeded'))
+                    dispatch(unJoin(meetUpId))
+                }
+            }).catch(error => {
+            if (!error.response) {
+                // network error
+                console.log('Error: Network Error');
+            } else {
+                console.log(error.response.data.message);
+            }
+        })
+    }
+}
+

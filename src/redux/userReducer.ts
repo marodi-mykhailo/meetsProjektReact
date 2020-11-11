@@ -61,7 +61,6 @@ export const logOut = () =>{
     return (dispatch: Dispatch) => {
         authAPI.logOut()
             .then(res => {
-                debugger
             })
     }
 }

@@ -11,6 +11,7 @@ const meetUpItem: MeetUpResponseDataType = {
     city: "Rzeszow",
     meetupImgPath: "C:\\Users\\Jerzy\\source\\repos\\Back\\ConnectUs\\wwwroot\\img\\600_478718750.png",
     createdByUser: '',
+    joined: false,
     users: []
 }
 
@@ -20,7 +21,6 @@ type meetUpReducerAction = |ReturnType<typeof setMeetUpItem>
 export const meetUpReducer = (state = meetUpItem, action: meetUpReducerAction) => {
     switch (action.type) {
         case "SET_MEET_UP_ITEM":
-            debugger
             return {
                 ...state,
                 ...action.meetUpData
@@ -39,7 +39,6 @@ export const getMeetUpItem = (meetUpId: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'))
     meetUpAPI.getMeetUpItem(meetUpId)
         .then(res => {
-            debugger
             dispatch(setMeetUpItem(res.data.data))
             dispatch(setAppStatusAC('succeeded'))
         }).catch(error => {

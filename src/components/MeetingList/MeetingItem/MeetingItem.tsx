@@ -3,10 +3,14 @@ import React from 'react';
 import s from './MeetingItem.module.css'
 import {AvatarGroup} from "@material-ui/lab";
 import Avatar from '@material-ui/core/Avatar';
+import {Button} from "@material-ui/core";
+import {useDispatch} from "react-redux";
+import {joinTC, unJoinTC} from "../../../redux/meetUpsListReduser";
+import {NavLink} from "react-router-dom";
 
 const img = 'https://secure.meetupstatic.com/photos/event/a/8/4/e/highres_486643086.jpeg'
 
-type MeetingItemPropsType ={
+type MeetingItemPropsType = {
     "id": string,
     "title": string,
     "description": string,
@@ -14,10 +18,21 @@ type MeetingItemPropsType ={
     "meetupDate": string,
     "city": string,
     "createdByUser": string,
+    joined: boolean,
     "users": []
 }
 
 const MeetingItem = (props: MeetingItemPropsType) => {
+    const dispatch = useDispatch()
+
+    const unJoinHandler = () => {
+        dispatch(unJoinTC(props.id))
+    }
+
+    const joinHandler = () => {
+        dispatch(joinTC(props.id))
+    }
+
     return (
         <Paper elevation={3} className={s.itemWrapp}>
             <div className={s.item}>
@@ -37,6 +52,12 @@ const MeetingItem = (props: MeetingItemPropsType) => {
                             <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg"/>
                         </AvatarGroup>
                     </div>
+                    <NavLink to={'/'}>
+                        <Button variant={'outlined'} color={'primary'}
+                                onClick={props.joined ? unJoinHandler : joinHandler}>
+                            {props.joined ? 'UnJoin' : 'Join'}
+                        </Button>
+                    </NavLink>
                 </div>
             </div>
         </Paper>
