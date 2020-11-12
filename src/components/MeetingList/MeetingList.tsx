@@ -23,6 +23,8 @@ const MeetingList = () => {
     const [isDescending, setIsDescending] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
     const [activeBtn, setActiveBtn] = useState<SortState>(0)
+    const [timerId, setTimerId] = useState<any>()
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -30,7 +32,13 @@ const MeetingList = () => {
     }, [])
 
     const searchQueryHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.currentTarget.value)
+        const value = e.currentTarget.value
+        setSearchQuery(value)
+        clearTimeout(timerId)
+        const id = setTimeout(() => {
+            searchQueryClickHandler()
+        }, 300)
+        setTimerId(id)
     }
 
     const searchQueryClickHandler = () => {
